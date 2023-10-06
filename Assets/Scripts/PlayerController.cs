@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Rigidbody rbPlayer;
+    public float gravityModifier;
+    public float jumpForce;
+    private bool onGround = true;
+
     void Start()
     {
-        
+        rbPlayer = GetComponent<Rigidbody>();
+
+        //same as "Physics.gravity = Physics.gravity * gravityModifier"
+        Physics.gravity *= gravityModifier;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        bool spaceDown = Input.GetKeyDown(KeyCode.Space);
+        if (spaceDown &&onGround)
+        {
+            rbPlayer.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            onGround = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        onGround = true;
     }
 }
